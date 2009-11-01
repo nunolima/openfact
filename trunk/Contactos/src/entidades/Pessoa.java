@@ -76,7 +76,7 @@ public class Pessoa implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date datacriacao;
     @ManyToMany
-    @JoinTable(name = "Pessoas",
+    @JoinTable(name = "Contactos",
     joinColumns = @JoinColumn(name = "ID_PESSOA", referencedColumnName = "ID"),
     inverseJoinColumns = @JoinColumn(name = "ID_CATEGORIA"))
     private Set<Categoria> categorias;

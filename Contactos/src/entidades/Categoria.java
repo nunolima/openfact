@@ -46,7 +46,7 @@ public class Categoria implements Serializable {
     private Integer activo;
     @ManyToMany
     @JoinTable(name = "Contactos",
-    joinColumns = @JoinColumn(name = "ID_CATEGORA", referencedColumnName = "ID"),
+    joinColumns = @JoinColumn(name = "ID_CATEGORIA", referencedColumnName = "ID"),
     inverseJoinColumns = @JoinColumn(name = "ID_PESSOA"))
     private Set<Pessoa> pessoas;
 

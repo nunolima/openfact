@@ -5,12 +5,17 @@
 package entidades;
 
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -26,7 +31,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Categorias.findById", query = "SELECT c FROM Categorias c WHERE c.id = :id"),
     @NamedQuery(name = "Categorias.findByDescricao", query = "SELECT c FROM Categorias c WHERE c.descricao = :descricao"),
     @NamedQuery(name = "Categorias.findByActivo", query = "SELECT c FROM Categorias c WHERE c.activo = :activo")})
-public class Categorias implements Serializable {
+public class Categoria implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -39,15 +44,20 @@ public class Categorias implements Serializable {
     private String descricao;
     @Column(name = "ACTIVO")
     private Integer activo;
+    @ManyToMany
+    @JoinTable(name = "Contactos",
+    joinColumns = @JoinColumn(name = "ID_CATEGORA", referencedColumnName = "ID"),
+    inverseJoinColumns = @JoinColumn(name = "ID_PESSOA"))
+    private Set<Pessoa> pessoas;
 
-    public Categorias() {
+    public Categoria() {
     }
 
-    public Categorias(Integer id) {
+    public Categoria(Integer id) {
         this.id = id;
     }
 
-    public Categorias(Integer id, String descricao) {
+    public Categoria(Integer id, String descricao) {
         this.id = id;
         this.descricao = descricao;
     }
@@ -86,10 +96,10 @@ public class Categorias implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Categorias)) {
+        if (!(object instanceof Categoria)) {
             return false;
         }
-        Categorias other = (Categorias) object;
+        Categoria other = (Categoria) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

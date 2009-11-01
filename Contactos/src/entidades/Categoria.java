@@ -50,6 +50,14 @@ public class Categoria implements Serializable {
     inverseJoinColumns = @JoinColumn(name = "ID_PESSOA"))
     private Set<Pessoa> pessoas;
 
+    public Set<Pessoa> getPessoas() {
+        return pessoas;
+    }
+
+    public void setPessoas(Set<Pessoa> pessoas) {
+        this.pessoas = pessoas;
+    }
+
     public Categoria() {
     }
 

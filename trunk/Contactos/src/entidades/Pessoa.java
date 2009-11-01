@@ -29,19 +29,19 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "PESSOAS")
 @NamedQueries({
-    @NamedQuery(name = "Pessoas.findAll", query = "SELECT p FROM Pessoas p"),
-    @NamedQuery(name = "Pessoas.findById", query = "SELECT p FROM Pessoas p WHERE p.id = :id"),
-    @NamedQuery(name = "Pessoas.findByNome", query = "SELECT p FROM Pessoas p WHERE p.nome = :nome"),
-    @NamedQuery(name = "Pessoas.findByDatanasc", query = "SELECT p FROM Pessoas p WHERE p.datanasc = :datanasc"),
-    @NamedQuery(name = "Pessoas.findByMorada", query = "SELECT p FROM Pessoas p WHERE p.morada = :morada"),
-    @NamedQuery(name = "Pessoas.findByLocalidade", query = "SELECT p FROM Pessoas p WHERE p.localidade = :localidade"),
-    @NamedQuery(name = "Pessoas.findByTelfcasa", query = "SELECT p FROM Pessoas p WHERE p.telfcasa = :telfcasa"),
-    @NamedQuery(name = "Pessoas.findByTelfempresa", query = "SELECT p FROM Pessoas p WHERE p.telfempresa = :telfempresa"),
-    @NamedQuery(name = "Pessoas.findByTelfmovel1", query = "SELECT p FROM Pessoas p WHERE p.telfmovel1 = :telfmovel1"),
-    @NamedQuery(name = "Pessoas.findByTelfmovel2", query = "SELECT p FROM Pessoas p WHERE p.telfmovel2 = :telfmovel2"),
-    @NamedQuery(name = "Pessoas.findByTelfmovel3", query = "SELECT p FROM Pessoas p WHERE p.telfmovel3 = :telfmovel3"),
-    @NamedQuery(name = "Pessoas.findByActivo", query = "SELECT p FROM Pessoas p WHERE p.activo = :activo"),
-    @NamedQuery(name = "Pessoas.findByDatacriacao", query = "SELECT p FROM Pessoas p WHERE p.datacriacao = :datacriacao")})
+    @NamedQuery(name = "Pessoa.findAll", query = "SELECT p FROM Pessoa p"),
+    @NamedQuery(name = "Pessoa.findById", query = "SELECT p FROM Pessoa p WHERE p.id = :id"),
+    @NamedQuery(name = "Pessoa.findByNome", query = "SELECT p FROM Pessoa p WHERE p.nome = :nome"),
+    @NamedQuery(name = "Pessoa.findByDatanasc", query = "SELECT p FROM Pessoa p WHERE p.datanasc = :datanasc"),
+    @NamedQuery(name = "Pessoa.findByMorada", query = "SELECT p FROM Pessoa p WHERE p.morada = :morada"),
+    @NamedQuery(name = "Pessoa.findByLocalidade", query = "SELECT p FROM Pessoa p WHERE p.localidade = :localidade"),
+    @NamedQuery(name = "Pessoa.findByTelfcasa", query = "SELECT p FROM Pessoa p WHERE p.telfcasa = :telfcasa"),
+    @NamedQuery(name = "Pessoa.findByTelfempresa", query = "SELECT p FROM Pessoa p WHERE p.telfempresa = :telfempresa"),
+    @NamedQuery(name = "Pessoa.findByTelfmovel1", query = "SELECT p FROM Pessoa p WHERE p.telfmovel1 = :telfmovel1"),
+    @NamedQuery(name = "Pessoa.findByTelfmovel2", query = "SELECT p FROM Pessoa p WHERE p.telfmovel2 = :telfmovel2"),
+    @NamedQuery(name = "Pessoa.findByTelfmovel3", query = "SELECT p FROM Pessoa p WHERE p.telfmovel3 = :telfmovel3"),
+    @NamedQuery(name = "Pessoa.findByActivo", query = "SELECT p FROM Pessoa p WHERE p.activo = :activo"),
+    @NamedQuery(name = "Pessoa.findByDatacriacao", query = "SELECT p FROM Pessoa p WHERE p.datacriacao = :datacriacao")})
 public class Pessoa implements Serializable {
 
     private static final long serialVersionUID = 1L;

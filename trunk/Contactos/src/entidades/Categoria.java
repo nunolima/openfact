@@ -26,10 +26,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CATEGORIAS")
 @NamedQueries({
-    @NamedQuery(name = "Categorias.findAll", query = "SELECT c FROM Categorias c"),
-    @NamedQuery(name = "Categorias.findById", query = "SELECT c FROM Categorias c WHERE c.id = :id"),
-    @NamedQuery(name = "Categorias.findByDescricao", query = "SELECT c FROM Categorias c WHERE c.descricao = :descricao"),
-    @NamedQuery(name = "Categorias.findByActivo", query = "SELECT c FROM Categorias c WHERE c.activo = :activo")})
+    @NamedQuery(name = "Categoria.findAll", query = "SELECT c FROM Categoria c"),
+    @NamedQuery(name = "Categoria.findById", query = "SELECT c FROM Categoria c WHERE c.id = :id"),
+    @NamedQuery(name = "Categoria.findByDescricao", query = "SELECT c FROM Categoria c WHERE c.descricao = :descricao"),
+    @NamedQuery(name = "Categoria.findByActivo", query = "SELECT c FROM Categoria c WHERE c.activo = :activo")})
 public class Categoria implements Serializable {
 
     private static final long serialVersionUID = 1L;

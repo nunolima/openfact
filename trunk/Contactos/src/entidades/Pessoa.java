@@ -81,6 +81,14 @@ public class Pessoa implements Serializable {
     inverseJoinColumns = @JoinColumn(name = "ID_CATEGORIA"))
     private Set<Categoria> categorias;
 
+    public Set<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(Set<Categoria> categorias) {
+        this.categorias = categorias;
+    }
+
     public Pessoa() {
     }
 

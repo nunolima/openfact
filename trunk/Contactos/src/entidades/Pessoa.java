@@ -219,6 +219,12 @@ public class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Pessoas[id=" + id + "]";
+        return "ID: " + id +
+                "Nome: " + nome +
+                "Morada: " + morada +
+                "Localidade: " + localidade +
+                "Telef.Casa: " + telfcasa +
+                "Telef.Empresa: " + telfempresa +
+                "Telef.Movel: " + telfmovel1;
     }
 }

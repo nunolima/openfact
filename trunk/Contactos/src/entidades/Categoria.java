@@ -116,6 +116,6 @@ public class Categoria implements Serializable {
 
     @Override
     public String toString() {
-        return "Categorias[id=" + id + ", activo" + activo + ", descrição" + descricao + "]";
+        return "Categoria[id=" + id + ", activo" + activo + ", descrição" + descricao + "]";
     }
 }

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades;
 
 import java.io.Serializable;
@@ -22,8 +21,13 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "CATEGORIAS")
-@NamedQueries({@NamedQuery(name = "Categorias.findAll", query = "SELECT c FROM Categorias c"), @NamedQuery(name = "Categorias.findById", query = "SELECT c FROM Categorias c WHERE c.id = :id"), @NamedQuery(name = "Categorias.findByDescricao", query = "SELECT c FROM Categorias c WHERE c.descricao = :descricao"), @NamedQuery(name = "Categorias.findByActivo", query = "SELECT c FROM Categorias c WHERE c.activo = :activo")})
+@NamedQueries({
+    @NamedQuery(name = "Categorias.findAll", query = "SELECT c FROM Categorias c"),
+    @NamedQuery(name = "Categorias.findById", query = "SELECT c FROM Categorias c WHERE c.id = :id"),
+    @NamedQuery(name = "Categorias.findByDescricao", query = "SELECT c FROM Categorias c WHERE c.descricao = :descricao"),
+    @NamedQuery(name = "Categorias.findByActivo", query = "SELECT c FROM Categorias c WHERE c.activo = :activo")})
 public class Categorias implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -96,5 +100,4 @@ public class Categorias implements Serializable {
     public String toString() {
         return "entidades.Categorias[id=" + id + "]";
     }
-
 }

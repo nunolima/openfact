@@ -5,6 +5,10 @@
 
 package contactos;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author User
@@ -18,7 +22,13 @@ public class Main {
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrameContactos().setVisible(true);
+                //new JFrameContactos().setVisible(true);
+                EntityManagerFactory emf = Persistence.createEntityManagerFactory("Contactos");
+                EntityManager em = emf.createEntityManager();
+                for (Object pessoa : em.createNamedQuery("Pessoas.findAll").getResultList()) {
+                    System.out.println("Pessoa: " + pessoa);
+                }
+
             }
         });
     }

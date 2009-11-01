@@ -2,17 +2,20 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -39,7 +42,8 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Pessoas.findByTelfmovel3", query = "SELECT p FROM Pessoas p WHERE p.telfmovel3 = :telfmovel3"),
     @NamedQuery(name = "Pessoas.findByActivo", query = "SELECT p FROM Pessoas p WHERE p.activo = :activo"),
     @NamedQuery(name = "Pessoas.findByDatacriacao", query = "SELECT p FROM Pessoas p WHERE p.datacriacao = :datacriacao")})
-public class Pessoas implements Serializable {
+public class Pessoa implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,15 +75,20 @@ public class Pessoas implements Serializable {
     @Column(name = "DATACRIACAO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datacriacao;
+    @ManyToMany
+    @JoinTable(name = "Pessoas",
+    joinColumns = @JoinColumn(name = "ID_PESSOA", referencedColumnName = "ID"),
+    inverseJoinColumns = @JoinColumn(name = "ID_CATEGORIA"))
+    private Set<Categoria> categorias;
 
-    public Pessoas() {
+    public Pessoa() {
     }
 
-    public Pessoas(Long id) {
+    public Pessoa(Long id) {
         this.id = id;
     }
 
-    public Pessoas(Long id, String nome) {
+    public Pessoa(Long id, String nome) {
         this.id = id;
         this.nome = nome;
     }
@@ -190,10 +199,10 @@ public class Pessoas implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Pessoas)) {
+        if (!(object instanceof Pessoa)) {
             return false;
         }
-        Pessoas other = (Pessoas) object;
+        Pessoa other = (Pessoa) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -204,5 +213,4 @@ public class Pessoas implements Serializable {
     public String toString() {
         return "entidades.Pessoas[id=" + id + "]";
     }
-
 }

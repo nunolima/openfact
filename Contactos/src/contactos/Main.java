@@ -5,6 +5,8 @@
 
 package contactos;
 
+import entidades.Pessoa;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -25,7 +27,7 @@ public class Main {
                 //new JFrameContactos().setVisible(true);
                 EntityManagerFactory emf = Persistence.createEntityManagerFactory("Contactos");
                 EntityManager em = emf.createEntityManager();
-                for (Object pessoa : em.createNamedQuery("Pessoas.findAll").getResultList()) {
+                for (Pessoa pessoa : ((List<Pessoa>)em.createNamedQuery("Pessoas.findAll").getResultList())) {
                     System.out.println("Pessoa: " + pessoa);
                 }
 

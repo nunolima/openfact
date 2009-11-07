@@ -24,3 +24,11 @@ id_pessoa bigint not null,
 id_categoria int not null,
 primary key (id_pessoa, id_categoria)
 );
+
+create table teste(
+id bigint,
+nome varchar(100),
+tipo varchar(100),
+CONSTRAINT NOME_TIPO_UK UNIQUE (nome, tipo)
+);
+

@@ -26,10 +26,9 @@ primary key (id_pessoa, id_categoria)
 );
 
 create table teste(
-id bigint,
+id bigint not null primary key,
 nome varchar(100),
 tipo varchar(100),
 local varchar(200) unique,
 CONSTRAINT NOME_TIPO_UK UNIQUE (nome, tipo)
 );
-

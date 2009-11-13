@@ -54,18 +54,18 @@ public class Main {
 
             // 1º LIVRO
             Livros livro = new Livros();
-            livro.setId(23l);
-            livro.setTitulo("E tudo o JAVA levou");
-            livro.setIsbn("1234");
+            livro.setId(111L);
+            livro.setTitulo("E tudo o JAVA levou 2");
+            livro.setIsbn("1236");
             livro.setAquisicaoData(new Date());
-            livro.setAquisicaoValor(10);
+            livro.setAquisicaoValor(20);
             livro.setEditoraId(new EditorasJpaController().findEditoras(new Long(1)));
             livro.setAreaId(new AreasJpaController().findAreas(new Long(1)));
 
             
             ArrayList<Autores> col = new ArrayList<Autores>();
-            col.add(new AutoresJpaController().findAutores(new Long(21)));
-            col.add(new AutoresJpaController().findAutores(new Long(31)));
+            col.add(new AutoresJpaController().findAutores(new Long(2)));
+            col.add(new AutoresJpaController().findAutores(new Long(3)));
             livro.setAutoresCollection(col);
 
             new LivrosJpaController().create(livro);

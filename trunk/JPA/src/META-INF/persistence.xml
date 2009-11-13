@@ -4,7 +4,6 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>entidades.Autores</class>
     <class>entidades.Livros</class>
-    <class>entidades.AutoresLivros</class>
     <class>entidades.Editoras</class>
     <class>entidades.Areas</class>
     <properties>

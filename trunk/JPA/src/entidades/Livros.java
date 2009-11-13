@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -59,7 +60,7 @@ public class Livros implements Serializable {
     @JoinColumn(name = "EDITORA_ID", referencedColumnName = "ID")
     @ManyToOne
     private Editoras editoraId;
-    @OneToMany(mappedBy = "livroId")
+    @OneToMany(mappedBy = "livroId", cascade=CascadeType.ALL)
     private Collection<AutoresLivros> autoresLivrosCollection;
 
     public Livros() {

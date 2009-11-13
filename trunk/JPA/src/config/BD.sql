@@ -42,7 +42,7 @@ CREATE TABLE "livros"
 ----------------------------------------FOREIGN KEY--------------------------------------------------------------------	
 );
 -->>>>>>>>>> AUTORES <<<<<<<<<<--
-CREATE TABLE "autores" 				 
+CREATE TABLE "AUTORES"
 (
 ----------------------------------------CAMPOS-------------------------------------------------------------------------
 	id 				bigint                  ,	-- Identificador (pkey)
@@ -65,6 +65,6 @@ CREATE TABLE "autores_livros"
 ----------------------------------------FOREIGN KEY--------------------------------------------------------------------
 );
 ALTER TABLE "autores_livros" ADD CONSTRAINT livro_id_fkey FOREIGN KEY (livro_id) REFERENCES "livros" (id);
-ALTER TABLE "autores_livros" ADD CONSTRAINT autor_id_fkey FOREIGN KEY (autor_id) REFERENCES "autores" (id);
+ALTER TABLE "autores_livros" ADD CONSTRAINT autor_id_fkey FOREIGN KEY (autor_id) REFERENCES "AUTORES" (id);
 ALTER TABLE "livros" ADD CONSTRAINT area_id_fkey FOREIGN KEY (area_id) REFERENCES "areas" (id);
 ALTER TABLE "livros" ADD CONSTRAINT editora_id_fkey FOREIGN KEY (editora_id) REFERENCES "editoras" (id);

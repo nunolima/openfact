@@ -31,6 +31,7 @@ public class Main {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
         try {
+            // teste do commit svn
             //1º AUTOR
             Autores autor1 = new Autores();
             autor1.setId(2l);

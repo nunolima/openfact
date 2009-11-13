@@ -4,8 +4,10 @@
  */
 package jpa;
 
+import entidades.Areas;
 import entidades.Autores;
 import entidades.AutoresLivros;
+import entidades.Editoras;
 import entidades.Livros;
 import entidades.controller.AreasJpaController;
 import entidades.controller.AutoresJpaController;
@@ -35,6 +37,18 @@ public class Main {
             autor2.setId(3l);
             autor2.setNome("Autor2");
             new AutoresJpaController().create(autor2);
+
+            // EDITORA
+            Editoras editora1 = new Editoras();
+            editora1.setId(1l);
+            editora1.setNome("Editora 1");
+            new EditorasJpaController().create(editora1);
+
+            // AREA
+            Areas area1 = new Areas();
+            area1.setId(1l);
+            area1.setDsc("Programacao Java");
+            new AreasJpaController().create(area1);
 
             // 1º LIVRO
             Livros livro = new Livros();

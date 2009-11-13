@@ -4,10 +4,7 @@
  */
 package jpa;
 
-import entidades.Areas;
 import entidades.Autores;
-import entidades.AutoresLivros;
-import entidades.Editoras;
 import entidades.Livros;
 import entidades.controller.AreasJpaController;
 import entidades.controller.AutoresJpaController;
@@ -67,10 +64,12 @@ public class Main {
 
             
             ArrayList<Autores> col = new ArrayList<Autores>();
-            col.add(new AutoresJpaController().findAutores(new Long(1)));
-            col.add(new AutoresJpaController().findAutores(new Long(2)));
+            col.add(new AutoresJpaController().findAutores(new Long(21)));
+            col.add(new AutoresJpaController().findAutores(new Long(31)));
             livro.setAutoresCollection(col);
+
             new LivrosJpaController().create(livro);
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }

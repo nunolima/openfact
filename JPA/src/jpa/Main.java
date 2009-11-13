@@ -26,6 +26,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        org.apache.log4j.BasicConfigurator.configure();
+        org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
+
         try {
             //1º AUTOR
             Autores autor1 = new Autores();

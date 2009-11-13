@@ -31,24 +31,24 @@ public class Main {
             // teste do commit svn
             //1º AUTOR
 //            Autores autor1 = new Autores();
-//            autor1.setId(2l);
+//            autor1.setId(2L);
 //            autor1.setNome("Autor1");
 //            new AutoresJpaController().create(autor1);
 //            //2º AUTOR
 //            Autores autor2 = new Autores();
-//            autor2.setId(3l);
+//            autor2.setId(3L);
 //            autor2.setNome("Autor2");
 //            new AutoresJpaController().create(autor2);
 //
 //            // EDITORA
 //            Editoras editora1 = new Editoras();
-//            editora1.setId(1l);
+//            editora1.setId(1L);
 //            editora1.setNome("Editora 1");
 //            new EditorasJpaController().create(editora1);
 //
 //            // AREA
 //            Areas area1 = new Areas();
-//            area1.setId(1l);
+//            area1.setId(1L);
 //            area1.setDsc("Programacao Java");
 //            new AreasJpaController().create(area1);
 

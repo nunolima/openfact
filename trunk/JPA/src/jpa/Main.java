@@ -27,12 +27,12 @@ public class Main {
         try {
             //1º AUTOR
             Autores autor1 = new Autores();
-            autor1.setId(1l);
+            autor1.setId(2l);
             autor1.setNome("Autor1");
             new AutoresJpaController().create(autor1);
             //2º AUTOR
             Autores autor2 = new Autores();
-            autor2.setId(2l);
+            autor2.setId(3l);
             autor2.setNome("Autor2");
             new AutoresJpaController().create(autor2);
 

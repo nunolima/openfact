@@ -38,10 +38,8 @@ CREATE TABLE "livros"
 ----------------------------------------PRIMARY KEY--------------------------------------------------------------------
 	CONSTRAINT livros_id PRIMARY KEY (id),
 	CONSTRAINT livros_titulo_unique UNIQUE (titulo),
-	CONSTRAINT livros_isbn_unique UNIQUE (isbn),
+	CONSTRAINT livros_isbn_unique UNIQUE (isbn)
 ----------------------------------------FOREIGN KEY--------------------------------------------------------------------	
-	CONSTRAINT area_id_fkey FOREIGN KEY (area_id) REFERENCES areas (id) ,
-	CONSTRAINT editora_id_fkey FOREIGN KEY (editora_id) REFERENCES editoras (id)
 );
 -->>>>>>>>>> AUTORES <<<<<<<<<<--
 CREATE TABLE "autores" 				 
@@ -63,8 +61,10 @@ CREATE TABLE "autores_livros"
 	autor_id			bigint                  ,	-- Autor
 ----------------------------------------PRIMARY KEY--------------------------------------------------------------------
 	CONSTRAINT autores_livros_pkey PRIMARY KEY (id),
-	CONSTRAINT autores_livros_unique UNIQUE (livro_id, autor_id),
+	CONSTRAINT autores_livros_unique UNIQUE (livro_id, autor_id)
 ----------------------------------------FOREIGN KEY--------------------------------------------------------------------
-	CONSTRAINT livro_id_fkey FOREIGN KEY (livro_id) REFERENCES livros (id),
-	CONSTRAINT autor_id_fkey FOREIGN KEY (autor_id) REFERENCES autores (id)
 );
+ALTER TABLE "autores_livros" ADD CONSTRAINT livro_id_fkey FOREIGN KEY (livro_id) REFERENCES "livros" (id);
+ALTER TABLE "autores_livros" ADD CONSTRAINT autor_id_fkey FOREIGN KEY (autor_id) REFERENCES "autores" (id);
+ALTER TABLE "livros" ADD CONSTRAINT area_id_fkey FOREIGN KEY (area_id) REFERENCES "areas" (id);
+ALTER TABLE "livros" ADD CONSTRAINT editora_id_fkey FOREIGN KEY (editora_id) REFERENCES "editoras" (id);

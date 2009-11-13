@@ -8,7 +8,6 @@ package entidades;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,18 +22,18 @@ import javax.persistence.UniqueConstraint;
  * @author PedrodeSousa
  */
 @Entity
-@Table(name = "autores", uniqueConstraints = {@UniqueConstraint(columnNames = {"nome"})})
+@Table(name = "autores", uniqueConstraints = {@UniqueConstraint(columnNames = {"NOME"})})
 @NamedQueries({@NamedQuery(name = "Autores.findAll", query = "SELECT a FROM Autores a"), @NamedQuery(name = "Autores.findById", query = "SELECT a FROM Autores a WHERE a.id = :id"), @NamedQuery(name = "Autores.findByNome", query = "SELECT a FROM Autores a WHERE a.nome = :nome")})
 public class Autores implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "nome", nullable = false, length = 100)
+    @Column(name = "NOME", nullable = false, length = 100)
     private String nome;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "autorId")
+    @OneToMany(mappedBy = "autorId")
     private Collection<AutoresLivros> autoresLivrosCollection;
 
     public Autores() {

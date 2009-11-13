@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,38 +28,38 @@ import javax.persistence.UniqueConstraint;
  * @author PedrodeSousa
  */
 @Entity
-@Table(name = "livros", uniqueConstraints = {@UniqueConstraint(columnNames = {"titulo"}), @UniqueConstraint(columnNames = {"isbn"})})
+@Table(name = "livros", uniqueConstraints = {@UniqueConstraint(columnNames = {"TITULO"}), @UniqueConstraint(columnNames = {"ISBN"})})
 @NamedQueries({@NamedQuery(name = "Livros.findAll", query = "SELECT l FROM Livros l"), @NamedQuery(name = "Livros.findById", query = "SELECT l FROM Livros l WHERE l.id = :id"), @NamedQuery(name = "Livros.findByTitulo", query = "SELECT l FROM Livros l WHERE l.titulo = :titulo"), @NamedQuery(name = "Livros.findByIsbn", query = "SELECT l FROM Livros l WHERE l.isbn = :isbn"), @NamedQuery(name = "Livros.findByAno", query = "SELECT l FROM Livros l WHERE l.ano = :ano"), @NamedQuery(name = "Livros.findByEdicaoNr", query = "SELECT l FROM Livros l WHERE l.edicaoNr = :edicaoNr"), @NamedQuery(name = "Livros.findByAquisicaoData", query = "SELECT l FROM Livros l WHERE l.aquisicaoData = :aquisicaoData"), @NamedQuery(name = "Livros.findByAquisicaoValor", query = "SELECT l FROM Livros l WHERE l.aquisicaoValor = :aquisicaoValor")})
 public class Livros implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "titulo", nullable = false, length = 100)
+    @Column(name = "TITULO", nullable = false, length = 100)
     private String titulo;
     @Basic(optional = false)
-    @Column(name = "isbn", nullable = false, length = 17)
+    @Column(name = "ISBN", nullable = false, length = 17)
     private String isbn;
-    @Column(name = "ano")
+    @Column(name = "ANO")
     private BigInteger ano;
-    @Column(name = "edicao_nr")
+    @Column(name = "EDICAO_NR")
     private BigInteger edicaoNr;
     @Basic(optional = false)
-    @Column(name = "aquisicao_data", nullable = false)
+    @Column(name = "AQUISICAO_DATA", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date aquisicaoData;
     @Basic(optional = false)
-    @Column(name = "aquisicao_valor", nullable = false)
-    private BigInteger aquisicaoValor;
-    @JoinColumn(name = "area_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @Column(name = "AQUISICAO_VALOR", nullable = false)
+    private int aquisicaoValor;
+    @JoinColumn(name = "AREA_ID", referencedColumnName = "ID")
+    @ManyToOne
     private Areas areaId;
-    @JoinColumn(name = "editora_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "EDITORA_ID", referencedColumnName = "ID")
+    @ManyToOne
     private Editoras editoraId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "livroId")
+    @OneToMany(mappedBy = "livroId")
     private Collection<AutoresLivros> autoresLivrosCollection;
 
     public Livros() {
@@ -70,7 +69,7 @@ public class Livros implements Serializable {
         this.id = id;
     }
 
-    public Livros(Long id, String titulo, String isbn, Date aquisicaoData, BigInteger aquisicaoValor) {
+    public Livros(Long id, String titulo, String isbn, Date aquisicaoData, int aquisicaoValor) {
         this.id = id;
         this.titulo = titulo;
         this.isbn = isbn;
@@ -126,11 +125,11 @@ public class Livros implements Serializable {
         this.aquisicaoData = aquisicaoData;
     }
 
-    public BigInteger getAquisicaoValor() {
+    public int getAquisicaoValor() {
         return aquisicaoValor;
     }
 
-    public void setAquisicaoValor(BigInteger aquisicaoValor) {
+    public void setAquisicaoValor(int aquisicaoValor) {
         this.aquisicaoValor = aquisicaoValor;
     }
 

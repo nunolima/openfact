@@ -15,26 +15,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  *
  * @author PedrodeSousa
  */
 @Entity
-@Table(name = "autores_livros", uniqueConstraints = {@UniqueConstraint(columnNames = {"livro_id", "autor_id"})})
+@Table(name = "autores_livros")
 @NamedQueries({@NamedQuery(name = "AutoresLivros.findAll", query = "SELECT a FROM AutoresLivros a"), @NamedQuery(name = "AutoresLivros.findById", query = "SELECT a FROM AutoresLivros a WHERE a.id = :id")})
 public class AutoresLivros implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Long id;
-    @JoinColumn(name = "autor_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "AUTOR_ID", referencedColumnName = "ID")
+    @ManyToOne
     private Autores autorId;
-    @JoinColumn(name = "livro_id", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "LIVRO_ID", referencedColumnName = "ID")
+    @ManyToOne
     private Livros livroId;
 
     public AutoresLivros() {

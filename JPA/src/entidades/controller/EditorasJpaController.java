@@ -6,7 +6,6 @@
 package entidades.controller;
 
 import entidades.Editoras;
-import entidades.controller.exceptions.IllegalOrphanException;
 import entidades.controller.exceptions.NonexistentEntityException;
 import entidades.controller.exceptions.PreexistingEntityException;
 import java.util.List;
@@ -15,8 +14,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import entidades.Livros;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +70,7 @@ public class EditorasJpaController {
         }
     }
 
-    public void edit(Editoras editoras) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Editoras editoras) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -81,18 +78,6 @@ public class EditorasJpaController {
             Editoras persistentEditoras = em.find(Editoras.class, editoras.getId());
             Collection<Livros> livrosCollectionOld = persistentEditoras.getLivrosCollection();
             Collection<Livros> livrosCollectionNew = editoras.getLivrosCollection();
-            List<String> illegalOrphanMessages = null;
-            for (Livros livrosCollectionOldLivros : livrosCollectionOld) {
-                if (!livrosCollectionNew.contains(livrosCollectionOldLivros)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Livros " + livrosCollectionOldLivros + " since its editoraId field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Collection<Livros> attachedLivrosCollectionNew = new ArrayList<Livros>();
             for (Livros livrosCollectionNewLivrosToAttach : livrosCollectionNew) {
                 livrosCollectionNewLivrosToAttach = em.getReference(livrosCollectionNewLivrosToAttach.getClass(), livrosCollectionNewLivrosToAttach.getId());
@@ -101,6 +86,12 @@ public class EditorasJpaController {
             livrosCollectionNew = attachedLivrosCollectionNew;
             editoras.setLivrosCollection(livrosCollectionNew);
             editoras = em.merge(editoras);
+            for (Livros livrosCollectionOldLivros : livrosCollectionOld) {
+                if (!livrosCollectionNew.contains(livrosCollectionOldLivros)) {
+                    livrosCollectionOldLivros.setEditoraId(null);
+                    livrosCollectionOldLivros = em.merge(livrosCollectionOldLivros);
+                }
+            }
             for (Livros livrosCollectionNewLivros : livrosCollectionNew) {
                 if (!livrosCollectionOld.contains(livrosCollectionNewLivros)) {
                     Editoras oldEditoraIdOfLivrosCollectionNewLivros = livrosCollectionNewLivros.getEditoraId();
@@ -129,7 +120,7 @@ public class EditorasJpaController {
         }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -141,16 +132,10 @@ public class EditorasJpaController {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The editoras with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Collection<Livros> livrosCollectionOrphanCheck = editoras.getLivrosCollection();
-            for (Livros livrosCollectionOrphanCheckLivros : livrosCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Editoras (" + editoras + ") cannot be destroyed since the Livros " + livrosCollectionOrphanCheckLivros + " in its livrosCollection field has a non-nullable editoraId field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Collection<Livros> livrosCollection = editoras.getLivrosCollection();
+            for (Livros livrosCollectionLivros : livrosCollection) {
+                livrosCollectionLivros.setEditoraId(null);
+                livrosCollectionLivros = em.merge(livrosCollectionLivros);
             }
             em.remove(editoras);
             em.getTransaction().commit();
@@ -172,9 +157,7 @@ public class EditorasJpaController {
     private List<Editoras> findEditorasEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Editoras.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Editoras as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -197,11 +180,7 @@ public class EditorasJpaController {
     public int getEditorasCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<DiscountCode> rt = cq.from(Editoras.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+            return ((Long) em.createQuery("select count(o) from Editoras as o").getSingleResult()).intValue();
         } finally {
             em.close();
         }

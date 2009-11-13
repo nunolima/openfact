@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -35,7 +36,7 @@ public class Autores implements Serializable {
     @Basic(optional = false)
     @Column(name = "NOME", nullable = false, length = 100)
     private String nome;
-    @OneToMany(mappedBy = "autorId")
+    @ManyToMany()
     @JoinTable(name = "AUTORES_LIVROS",
     joinColumns = @JoinColumn(name = "AUTOR_ID", referencedColumnName = "ID"),
     inverseJoinColumns = @JoinColumn(name = "LIVRO_ID"))

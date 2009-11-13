@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -61,7 +62,7 @@ public class Livros implements Serializable {
     @JoinColumn(name = "EDITORA_ID", referencedColumnName = "ID")
     @ManyToOne
     private Editoras editoraId;
-    @OneToMany(mappedBy = "livroId", cascade=CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name = "AUTORES_LIVROS",
     joinColumns = @JoinColumn(name = "LIVRO_ID", referencedColumnName = "ID"),
     inverseJoinColumns = @JoinColumn(name = "AUTOR_ID"))

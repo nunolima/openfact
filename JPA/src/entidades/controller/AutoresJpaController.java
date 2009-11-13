@@ -14,6 +14,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import entidades.Livros;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  *
@@ -31,11 +34,24 @@ public class AutoresJpaController {
     }
 
     public void create(Autores autores) throws PreexistingEntityException, Exception {
+        if (autores.getLivrosCollection() == null) {
+            autores.setLivrosCollection(new ArrayList<Livros>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Collection<Livros> attachedLivrosCollection = new ArrayList<Livros>();
+            for (Livros livrosCollectionLivrosToAttach : autores.getLivrosCollection()) {
+                livrosCollectionLivrosToAttach = em.getReference(livrosCollectionLivrosToAttach.getClass(), livrosCollectionLivrosToAttach.getId());
+                attachedLivrosCollection.add(livrosCollectionLivrosToAttach);
+            }
+            autores.setLivrosCollection(attachedLivrosCollection);
             em.persist(autores);
+            for (Livros livrosCollectionLivros : autores.getLivrosCollection()) {
+                livrosCollectionLivros.getAutoresCollection().add(autores);
+                livrosCollectionLivros = em.merge(livrosCollectionLivros);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findAutores(autores.getId()) != null) {
@@ -54,7 +70,29 @@ public class AutoresJpaController {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Autores persistentAutores = em.find(Autores.class, autores.getId());
+            Collection<Livros> livrosCollectionOld = persistentAutores.getLivrosCollection();
+            Collection<Livros> livrosCollectionNew = autores.getLivrosCollection();
+            Collection<Livros> attachedLivrosCollectionNew = new ArrayList<Livros>();
+            for (Livros livrosCollectionNewLivrosToAttach : livrosCollectionNew) {
+                livrosCollectionNewLivrosToAttach = em.getReference(livrosCollectionNewLivrosToAttach.getClass(), livrosCollectionNewLivrosToAttach.getId());
+                attachedLivrosCollectionNew.add(livrosCollectionNewLivrosToAttach);
+            }
+            livrosCollectionNew = attachedLivrosCollectionNew;
+            autores.setLivrosCollection(livrosCollectionNew);
             autores = em.merge(autores);
+            for (Livros livrosCollectionOldLivros : livrosCollectionOld) {
+                if (!livrosCollectionNew.contains(livrosCollectionOldLivros)) {
+                    livrosCollectionOldLivros.getAutoresCollection().remove(autores);
+                    livrosCollectionOldLivros = em.merge(livrosCollectionOldLivros);
+                }
+            }
+            for (Livros livrosCollectionNewLivros : livrosCollectionNew) {
+                if (!livrosCollectionOld.contains(livrosCollectionNewLivros)) {
+                    livrosCollectionNewLivros.getAutoresCollection().add(autores);
+                    livrosCollectionNewLivros = em.merge(livrosCollectionNewLivros);
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -83,6 +121,11 @@ public class AutoresJpaController {
                 autores.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The autores with id " + id + " no longer exists.", enfe);
+            }
+            Collection<Livros> livrosCollection = autores.getLivrosCollection();
+            for (Livros livrosCollectionLivros : livrosCollection) {
+                livrosCollectionLivros.getAutoresCollection().remove(autores);
+                livrosCollectionLivros = em.merge(livrosCollectionLivros);
             }
             em.remove(autores);
             em.getTransaction().commit();

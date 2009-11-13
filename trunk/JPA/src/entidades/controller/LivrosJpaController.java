@@ -6,7 +6,6 @@
 package entidades.controller;
 
 import entidades.Livros;
-import entidades.controller.exceptions.IllegalOrphanException;
 import entidades.controller.exceptions.NonexistentEntityException;
 import entidades.controller.exceptions.PreexistingEntityException;
 import java.util.List;
@@ -15,8 +14,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import entidades.Areas;
 import entidades.Editoras;
 import entidades.AutoresLivros;
@@ -93,7 +90,7 @@ public class LivrosJpaController {
         }
     }
 
-    public void edit(Livros livros) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Livros livros) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -105,18 +102,6 @@ public class LivrosJpaController {
             Editoras editoraIdNew = livros.getEditoraId();
             Collection<AutoresLivros> autoresLivrosCollectionOld = persistentLivros.getAutoresLivrosCollection();
             Collection<AutoresLivros> autoresLivrosCollectionNew = livros.getAutoresLivrosCollection();
-            List<String> illegalOrphanMessages = null;
-            for (AutoresLivros autoresLivrosCollectionOldAutoresLivros : autoresLivrosCollectionOld) {
-                if (!autoresLivrosCollectionNew.contains(autoresLivrosCollectionOldAutoresLivros)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain AutoresLivros " + autoresLivrosCollectionOldAutoresLivros + " since its livroId field is not nullable.");
-                }
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             if (areaIdNew != null) {
                 areaIdNew = em.getReference(areaIdNew.getClass(), areaIdNew.getId());
                 livros.setAreaId(areaIdNew);
@@ -149,6 +134,12 @@ public class LivrosJpaController {
                 editoraIdNew.getLivrosCollection().add(livros);
                 editoraIdNew = em.merge(editoraIdNew);
             }
+            for (AutoresLivros autoresLivrosCollectionOldAutoresLivros : autoresLivrosCollectionOld) {
+                if (!autoresLivrosCollectionNew.contains(autoresLivrosCollectionOldAutoresLivros)) {
+                    autoresLivrosCollectionOldAutoresLivros.setLivroId(null);
+                    autoresLivrosCollectionOldAutoresLivros = em.merge(autoresLivrosCollectionOldAutoresLivros);
+                }
+            }
             for (AutoresLivros autoresLivrosCollectionNewAutoresLivros : autoresLivrosCollectionNew) {
                 if (!autoresLivrosCollectionOld.contains(autoresLivrosCollectionNewAutoresLivros)) {
                     Livros oldLivroIdOfAutoresLivrosCollectionNewAutoresLivros = autoresLivrosCollectionNewAutoresLivros.getLivroId();
@@ -177,7 +168,7 @@ public class LivrosJpaController {
         }
     }
 
-    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -189,17 +180,6 @@ public class LivrosJpaController {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The livros with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            Collection<AutoresLivros> autoresLivrosCollectionOrphanCheck = livros.getAutoresLivrosCollection();
-            for (AutoresLivros autoresLivrosCollectionOrphanCheckAutoresLivros : autoresLivrosCollectionOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Livros (" + livros + ") cannot be destroyed since the AutoresLivros " + autoresLivrosCollectionOrphanCheckAutoresLivros + " in its autoresLivrosCollection field has a non-nullable livroId field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
             Areas areaId = livros.getAreaId();
             if (areaId != null) {
                 areaId.getLivrosCollection().remove(livros);
@@ -209,6 +189,11 @@ public class LivrosJpaController {
             if (editoraId != null) {
                 editoraId.getLivrosCollection().remove(livros);
                 editoraId = em.merge(editoraId);
+            }
+            Collection<AutoresLivros> autoresLivrosCollection = livros.getAutoresLivrosCollection();
+            for (AutoresLivros autoresLivrosCollectionAutoresLivros : autoresLivrosCollection) {
+                autoresLivrosCollectionAutoresLivros.setLivroId(null);
+                autoresLivrosCollectionAutoresLivros = em.merge(autoresLivrosCollectionAutoresLivros);
             }
             em.remove(livros);
             em.getTransaction().commit();
@@ -230,9 +215,7 @@ public class LivrosJpaController {
     private List<Livros> findLivrosEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Livros.class));
-            Query q = em.createQuery(cq);
+            Query q = em.createQuery("select object(o) from Livros as o");
             if (!all) {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
@@ -255,11 +238,7 @@ public class LivrosJpaController {
     public int getLivrosCount() {
         EntityManager em = getEntityManager();
         try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<DiscountCode> rt = cq.from(Livros.class);
-            cq.select(em.getCriteriaBuilder().count(rt));
-            Query q = em.createQuery(cq);
-            return ((Long) q.getSingleResult()).intValue();
+            return ((Long) em.createQuery("select count(o) from Livros as o").getSingleResult()).intValue();
         } finally {
             em.close();
         }

@@ -8,7 +8,6 @@ package entidades;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -23,20 +22,20 @@ import javax.persistence.UniqueConstraint;
  * @author PedrodeSousa
  */
 @Entity
-@Table(name = "areas", uniqueConstraints = {@UniqueConstraint(columnNames = {"dsc"})})
+@Table(name = "areas", uniqueConstraints = {@UniqueConstraint(columnNames = {"DSC"})})
 @NamedQueries({@NamedQuery(name = "Areas.findAll", query = "SELECT a FROM Areas a"), @NamedQuery(name = "Areas.findById", query = "SELECT a FROM Areas a WHERE a.id = :id"), @NamedQuery(name = "Areas.findByDsc", query = "SELECT a FROM Areas a WHERE a.dsc = :dsc"), @NamedQuery(name = "Areas.findByObs", query = "SELECT a FROM Areas a WHERE a.obs = :obs")})
 public class Areas implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private Long id;
     @Basic(optional = false)
-    @Column(name = "dsc", nullable = false, length = 100)
+    @Column(name = "DSC", nullable = false, length = 100)
     private String dsc;
-    @Column(name = "obs", length = 50)
+    @Column(name = "OBS", length = 50)
     private String obs;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "areaId")
+    @OneToMany(mappedBy = "areaId")
     private Collection<Livros> livrosCollection;
 
     public Areas() {

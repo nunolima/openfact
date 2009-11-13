@@ -15,6 +15,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -61,7 +62,10 @@ public class Livros implements Serializable {
     @ManyToOne
     private Editoras editoraId;
     @OneToMany(mappedBy = "livroId", cascade=CascadeType.ALL)
-    private Collection<AutoresLivros> autoresLivrosCollection;
+    @JoinTable(name = "AUTORES_LIVROS",
+    joinColumns = @JoinColumn(name = "LIVRO_ID", referencedColumnName = "ID"),
+    inverseJoinColumns = @JoinColumn(name = "AUTOR_ID"))
+    private Collection<Autores> autoresCollection;
 
     public Livros() {
     }
@@ -150,12 +154,12 @@ public class Livros implements Serializable {
         this.editoraId = editoraId;
     }
 
-    public Collection<AutoresLivros> getAutoresLivrosCollection() {
-        return autoresLivrosCollection;
+    public Collection<Autores> getAutoresCollection() {
+        return autoresCollection;
     }
 
-    public void setAutoresLivrosCollection(Collection<AutoresLivros> autoresLivrosCollection) {
-        this.autoresLivrosCollection = autoresLivrosCollection;
+    public void setAutoresCollection(Collection<Autores> autoresCollection) {
+        this.autoresCollection = autoresCollection;
     }
 
     @Override

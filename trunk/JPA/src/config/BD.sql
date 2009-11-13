@@ -56,7 +56,7 @@ CREATE TABLE "AUTORES"
 CREATE TABLE "AUTORES_LIVROS"
 (
 ----------------------------------------CAMPOS-------------------------------------------------------------------------
-	id 				bigint                  ,	-- Identificador (pkey)
+	id 				bigint                  generated always as identity,	-- Identificador (pkey)
 	livro_id			bigint                  ,	-- Livro
 	autor_id			bigint                  ,	-- Autor
 ----------------------------------------PRIMARY KEY--------------------------------------------------------------------

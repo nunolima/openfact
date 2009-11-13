@@ -16,7 +16,6 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import entidades.Areas;
 import entidades.Editoras;
-import entidades.AutoresLivros;
 import java.util.ArrayList;
 import java.util.Collection;
 

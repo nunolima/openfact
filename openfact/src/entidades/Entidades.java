@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
  * @author User
  */
 @Entity
+@NamedQuery(name="findAllEntidades", query="select e from Entidades e")
 public class Entidades implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

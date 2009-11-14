@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
  * @author User
  */
 @Entity
-public class TipoEntidades implements Serializable {
+public class TipoEntidadesByHand implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class TipoEntidades implements Serializable {
     private String descricao;
 
     @OneToMany(mappedBy="tipoEntidade")
-    private Set<Entidades> entidades;
+    private Set<EntidadesByHand> entidades;
 
     public String getDescricao() {
         return descricao;
@@ -47,11 +47,11 @@ public class TipoEntidades implements Serializable {
         this.id = id;
     }
 
-    public Set<Entidades> getEntidades() {
+    public Set<EntidadesByHand> getEntidades() {
         return entidades;
     }
 
-    public void setEntidades(Set<Entidades> entidades) {
+    public void setEntidades(Set<EntidadesByHand> entidades) {
         this.entidades = entidades;
     }
     
@@ -65,10 +65,10 @@ public class TipoEntidades implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoEntidades)) {
+        if (!(object instanceof TipoEntidadesByHand)) {
             return false;
         }
-        TipoEntidades other = (TipoEntidades) object;
+        TipoEntidadesByHand other = (TipoEntidadesByHand) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

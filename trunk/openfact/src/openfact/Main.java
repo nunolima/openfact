@@ -2,11 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package openfact;
 
 import entidades.Entidades;
 import entidades.TipoEntidades;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -24,36 +24,50 @@ public class Main {
 
         carregaExemploBDados();
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("openfactPU");
-        EntityManager em = emf.createEntityManager();
+        listaTodasEntidades();
 
-        TipoEntidades t1 = em.find(TipoEntidades.class, 1L);
-        System.out.println("TipoEntidades: " + t1);
+//        EntityManagerFactory emf = Persistence.createEntityManagerFactory("openfactPU");
+//        EntityManager em = emf.createEntityManager();
+//
+//        TipoEntidades t1 = em.find(TipoEntidades.class, 1L);
+//        System.out.println("TipoEntidades: " + t1);
+//
+//        Entidades e1 = em.find(Entidades.class, 1L);
+//        System.out.println("Entidades: " + e1);
+//
+//        em.close();
+//        emf.close();
 
-        Entidades e1 = em.find(Entidades.class, 1L);
-        System.out.println("Entidades: " + e1);
-
-        em.close();
-        emf.close();
-        
     }
 
-    private static void carregaExemploBDados(){
+    private static void carregaExemploBDados() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("openfactPU");
         EntityManager em = emf.createEntityManager();
 
         em.getTransaction().begin();
 
-        TipoEntidades t1 = new TipoEntidades();
-        t1.setDescricao("Clientes");
+        TipoEntidades t1 = (TipoEntidades) em.createQuery("select t from TipoEntidades t where t.descricao = 'Fornecedores'").getSingleResult();
 
-        em.persist(t1);
+        if (t1 == null) {
+            t1 = new TipoEntidades();
+            t1.setDescricao("Fornecedores");
+        }
 
         Entidades e1 = new Entidades();
-        e1.setNome("Nuno");
+        e1.setNome("Ana");
         e1.setTipoEntidade(t1);
 
+        Entidades e2 = new Entidades();
+        e2.setNome("André");
+        e2.setTipoEntidade(t1);
+
+        Entidades e3 = new Entidades();
+        e3.setNome("Pedro");
+        e3.setTipoEntidade(t1);
+
         em.persist(e1);
+        em.persist(e2);
+        em.persist(e3);
 
         em.getTransaction().commit();
 
@@ -61,4 +75,15 @@ public class Main {
         emf.close();
     }
 
+    private static void listaTodasEntidades() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("openfactPU");
+        EntityManager em = emf.createEntityManager();
+
+        for (Entidades e : (List<Entidades>) em.createNamedQuery("findAllEntidades").getResultList()) {
+            System.out.println("Entidade: " + e);
+        }
+
+        em.close();
+        emf.close();
+    }
 }

@@ -77,7 +77,7 @@ public class TipoEntidades implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.TipoEntidades[id=" + id + "]";
+        return "entidades.TipoEntidades[id=" + id + ", descricao=" + descricao + "]";
     }
 
 }

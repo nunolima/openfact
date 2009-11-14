@@ -79,7 +79,7 @@ public class Entidades implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Entidades[id=" + id + "]";
+        return "entidades.Entidades[id=" + id + ", nome=" + nome + ", tipo=" + tipoEntidade.getDescricao() + "]";
     }
 
 }

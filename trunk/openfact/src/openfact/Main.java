@@ -22,6 +22,8 @@ public class Main {
      */
     public static void main(String[] args) {
 
+        carregaExemploBDados();
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("openfactPU");
         EntityManager em = emf.createEntityManager();
 

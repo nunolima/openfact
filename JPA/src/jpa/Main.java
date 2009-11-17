@@ -35,7 +35,7 @@ public class Main {
 
         try {
             // teste do commit svn
-            //1º AUTOR
+////            1º AUTOR
 //            Autores autor1 = new Autores();
 //            autor1.setId(2L);
 //            autor1.setNome("Autor1");
@@ -57,45 +57,46 @@ public class Main {
 //            area1.setId(1L);
 //            area1.setDsc("Programacao Java");
 //            new AreasJpaController().create(area1);
-//
-//            // 1º LIVRO
-//            Livros livro = new Livros();
-//            livro.setId(112L);
-//            livro.setTitulo("E tudo o JAVA levou 3");
-//            livro.setIsbn("1236");
-//            livro.setAquisicaoData(new Date());
-//            livro.setAquisicaoValor(20);
-//            livro.setEditoraId(new EditorasJpaController().findEditoras(new Long(1)));
-//            livro.setAreaId(new AreasJpaController().findAreas(new Long(1)));
-//
-//
-//            ArrayList<Autores> col = new ArrayList<Autores>();
-//            col.add(new AutoresJpaController().findAutores(new Long(2)));
-//            col.add(new AutoresJpaController().findAutores(new Long(3)));
-//            livro.setAutoresCollection(col);
-//
-//            new LivrosJpaController().create(livro);
 
-            // 2º LIVRO
-            Livros livro2 = new Livros();
-            livro2.setId(10L);
-            livro2.setTitulo("Mais um livro de JAVA");
-            livro2.setIsbn("2233");
-            livro2.setAquisicaoData(new Date());
-            livro2.setAquisicaoValor(15);
-            livro2.setEditoraId(new EditorasJpaController().findEditoras(new Long(1)));
-            livro2.setAreaId(new AreasJpaController().findAreas(new Long(1)));
-            new LivrosJpaController().create(livro2);
+            // 1º LIVRO
+            Livros livro = new Livros();
+            livro.setId(114L);
+            livro.setTitulo("E tudo o JAVA levou 5");
+            livro.setIsbn("1238");
+            livro.setAquisicaoData(new Date());
+            livro.setAquisicaoValor(20);
+            livro.setEditoraId(new EditorasJpaController().findEditoras(new Long(1)));
+            livro.setAreaId(new AreasJpaController().findAreas(new Long(1)));
 
-            //3º AUTOR
-            Autores autor3 = new Autores();
-            autor3.setId(1L);
-            autor3.setNome("Autor3");
-            Set<Livros> cSet = new HashSet<Livros>();
-            //cSet.add(new LivrosJpaController().findLivros(new Long(10)));
-            cSet.add(livro2);
-            autor3.setLivrosCollection(cSet);
-            new AutoresJpaController().create(autor3);
+
+            ArrayList<Autores> col = new ArrayList<Autores>();
+            col.add(new AutoresJpaController().findAutores(new Long(2)));
+            col.add(new AutoresJpaController().findAutores(new Long(3)));
+//            col.add(new AutoresJpaController().findAutores(new Long(3)));//Testar duplicação registo
+            livro.setAutoresCollection(col);
+
+            new LivrosJpaController().create(livro);
+
+//            // 2º LIVRO
+//            Livros livro2 = new Livros();
+//            livro2.setId(10L);
+//            livro2.setTitulo("Mais um livro de JAVA");
+//            livro2.setIsbn("2233");
+//            livro2.setAquisicaoData(new Date());
+//            livro2.setAquisicaoValor(15);
+//            livro2.setEditoraId(new EditorasJpaController().findEditoras(new Long(1)));
+//            livro2.setAreaId(new AreasJpaController().findAreas(new Long(1)));
+//            new LivrosJpaController().create(livro2);
+//
+//            //3º AUTOR
+//            Autores autor3 = new Autores();
+//            autor3.setId(1L);
+//            autor3.setNome("Autor3");
+//            Set<Livros> cSet = new HashSet<Livros>();
+//            //cSet.add(new LivrosJpaController().findLivros(new Long(10)));
+//            cSet.add(livro2);
+//            autor3.setLivrosCollection(cSet);
+//            new AutoresJpaController().create(autor3);
             
         } catch (Exception ex) {
             ex.printStackTrace();

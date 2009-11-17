@@ -20,7 +20,7 @@ import java.util.Collection;
 
 /**
  *
- * @author nunolima
+ * @author PedrodeSousa
  */
 public class AreasJpaController {
 

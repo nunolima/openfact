@@ -22,7 +22,7 @@ import java.util.Collection;
 
 /**
  *
- * @author nunolima
+ * @author PedrodeSousa
  */
 public class LivrosJpaController {
 
@@ -68,10 +68,10 @@ public class LivrosJpaController {
                 editoraId.getLivrosCollection().add(livros);
                 editoraId = em.merge(editoraId);
             }
-//            for (Autores autoresCollectionAutores : livros.getAutoresCollection()) {
-//                autoresCollectionAutores.getLivrosCollection().add(livros);
-//                autoresCollectionAutores = em.merge(autoresCollectionAutores);
-//            }
+            for (Autores autoresCollectionAutores : livros.getAutoresCollection()) {
+                autoresCollectionAutores.getLivrosCollection().add(livros);
+                autoresCollectionAutores = em.merge(autoresCollectionAutores);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             if (findLivros(livros.getId()) != null) {

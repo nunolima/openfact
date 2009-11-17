@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades;
 
 import java.io.Serializable;
@@ -12,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,6 +25,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "autores", uniqueConstraints = {@UniqueConstraint(columnNames = {"NOME"})})
 @NamedQueries({@NamedQuery(name = "Autores.findAll", query = "SELECT a FROM Autores a"), @NamedQuery(name = "Autores.findById", query = "SELECT a FROM Autores a WHERE a.id = :id"), @NamedQuery(name = "Autores.findByNome", query = "SELECT a FROM Autores a WHERE a.nome = :nome")})
 public class Autores implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -35,10 +34,10 @@ public class Autores implements Serializable {
     @Basic(optional = false)
     @Column(name = "NOME", nullable = false, length = 100)
     private String nome;
-    @ManyToMany()
-    @JoinTable(name = "AUTORES_LIVROS",
-    joinColumns = @JoinColumn(name = "AUTOR_ID", referencedColumnName = "ID"),
-    inverseJoinColumns = @JoinColumn(name = "LIVRO_ID"))
+    @ManyToMany(mappedBy = "autoresCollection")
+//    @JoinTable(name = "AUTORES_LIVROS",
+//    joinColumns = @JoinColumn(name = "AUTOR_ID", referencedColumnName = "ID"),
+//    inverseJoinColumns = @JoinColumn(name = "LIVRO_ID"))
     private Collection<Livros> livrosCollection;
 
     public Autores() {
@@ -101,5 +100,4 @@ public class Autores implements Serializable {
     public String toString() {
         return "entidades.Autores[id=" + id + "]";
     }
-
 }

@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -31,14 +32,16 @@ public class Autores implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID", nullable = false)
     private Long id;
+
     @Basic(optional = false)
     @Column(name = "NOME", nullable = false, length = 100)
     private String nome;
-    @ManyToMany(mappedBy = "autoresCollection")
-//    @JoinTable(name = "AUTORES_LIVROS",
-//    joinColumns = @JoinColumn(name = "AUTOR_ID", referencedColumnName = "ID"),
-//    inverseJoinColumns = @JoinColumn(name = "LIVRO_ID"))
-    private Collection<Livros> livrosCollection;
+//    @ManyToMany(mappedBy = "autoresCollection")
+////    @JoinTable(name = "AUTORES_LIVROS",
+////    joinColumns = @JoinColumn(name = "AUTOR_ID", referencedColumnName = "ID"),
+////    inverseJoinColumns = @JoinColumn(name = "LIVRO_ID"))
+    @OneToMany(mappedBy="autor")
+    private Collection<LivrosAutores> livrosCollection;
 
     public Autores() {
     }
@@ -68,11 +71,11 @@ public class Autores implements Serializable {
         this.nome = nome;
     }
 
-    public Collection<Livros> getLivrosCollection() {
+    public Collection<LivrosAutores> getLivrosCollection() {
         return livrosCollection;
     }
 
-    public void setLivrosCollection(Collection<Livros> livrosCollection) {
+    public void setLivrosCollection(Collection<LivrosAutores> livrosCollection) {
         this.livrosCollection = livrosCollection;
     }
 

@@ -16,13 +16,13 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import entidades.Areas;
 import entidades.Editoras;
-import entidades.Autores;
+import entidades.LivrosAutores;
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
  *
- * @author PedrodeSousa
+ * @author User
  */
 public class LivrosJpaController {
 
@@ -37,7 +37,7 @@ public class LivrosJpaController {
 
     public void create(Livros livros) throws PreexistingEntityException, Exception {
         if (livros.getAutoresCollection() == null) {
-            livros.setAutoresCollection(new ArrayList<Autores>());
+            livros.setAutoresCollection(new ArrayList<LivrosAutores>());
         }
         EntityManager em = null;
         try {
@@ -53,10 +53,10 @@ public class LivrosJpaController {
                 editoraId = em.getReference(editoraId.getClass(), editoraId.getId());
                 livros.setEditoraId(editoraId);
             }
-            Collection<Autores> attachedAutoresCollection = new ArrayList<Autores>();
-            for (Autores autoresCollectionAutoresToAttach : livros.getAutoresCollection()) {
-                autoresCollectionAutoresToAttach = em.getReference(autoresCollectionAutoresToAttach.getClass(), autoresCollectionAutoresToAttach.getId());
-                attachedAutoresCollection.add(autoresCollectionAutoresToAttach);
+            Collection<LivrosAutores> attachedAutoresCollection = new ArrayList<LivrosAutores>();
+            for (LivrosAutores autoresCollectionLivrosAutoresToAttach : livros.getAutoresCollection()) {
+                autoresCollectionLivrosAutoresToAttach = em.getReference(autoresCollectionLivrosAutoresToAttach.getClass(), autoresCollectionLivrosAutoresToAttach.getIdLivrosAutores());
+                attachedAutoresCollection.add(autoresCollectionLivrosAutoresToAttach);
             }
             livros.setAutoresCollection(attachedAutoresCollection);
             em.persist(livros);
@@ -68,9 +68,14 @@ public class LivrosJpaController {
                 editoraId.getLivrosCollection().add(livros);
                 editoraId = em.merge(editoraId);
             }
-            for (Autores autoresCollectionAutores : livros.getAutoresCollection()) {
-                autoresCollectionAutores.getLivrosCollection().add(livros);
-                autoresCollectionAutores = em.merge(autoresCollectionAutores);
+            for (LivrosAutores autoresCollectionLivrosAutores : livros.getAutoresCollection()) {
+                Livros oldLivroOfAutoresCollectionLivrosAutores = autoresCollectionLivrosAutores.getLivro();
+                autoresCollectionLivrosAutores.setLivro(livros);
+                autoresCollectionLivrosAutores = em.merge(autoresCollectionLivrosAutores);
+                if (oldLivroOfAutoresCollectionLivrosAutores != null) {
+                    oldLivroOfAutoresCollectionLivrosAutores.getAutoresCollection().remove(autoresCollectionLivrosAutores);
+                    oldLivroOfAutoresCollectionLivrosAutores = em.merge(oldLivroOfAutoresCollectionLivrosAutores);
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -95,8 +100,8 @@ public class LivrosJpaController {
             Areas areaIdNew = livros.getAreaId();
             Editoras editoraIdOld = persistentLivros.getEditoraId();
             Editoras editoraIdNew = livros.getEditoraId();
-            Collection<Autores> autoresCollectionOld = persistentLivros.getAutoresCollection();
-            Collection<Autores> autoresCollectionNew = livros.getAutoresCollection();
+            Collection<LivrosAutores> autoresCollectionOld = persistentLivros.getAutoresCollection();
+            Collection<LivrosAutores> autoresCollectionNew = livros.getAutoresCollection();
             if (areaIdNew != null) {
                 areaIdNew = em.getReference(areaIdNew.getClass(), areaIdNew.getId());
                 livros.setAreaId(areaIdNew);
@@ -105,10 +110,10 @@ public class LivrosJpaController {
                 editoraIdNew = em.getReference(editoraIdNew.getClass(), editoraIdNew.getId());
                 livros.setEditoraId(editoraIdNew);
             }
-            Collection<Autores> attachedAutoresCollectionNew = new ArrayList<Autores>();
-            for (Autores autoresCollectionNewAutoresToAttach : autoresCollectionNew) {
-                autoresCollectionNewAutoresToAttach = em.getReference(autoresCollectionNewAutoresToAttach.getClass(), autoresCollectionNewAutoresToAttach.getId());
-                attachedAutoresCollectionNew.add(autoresCollectionNewAutoresToAttach);
+            Collection<LivrosAutores> attachedAutoresCollectionNew = new ArrayList<LivrosAutores>();
+            for (LivrosAutores autoresCollectionNewLivrosAutoresToAttach : autoresCollectionNew) {
+                autoresCollectionNewLivrosAutoresToAttach = em.getReference(autoresCollectionNewLivrosAutoresToAttach.getClass(), autoresCollectionNewLivrosAutoresToAttach.getIdAutor());
+                attachedAutoresCollectionNew.add(autoresCollectionNewLivrosAutoresToAttach);
             }
             autoresCollectionNew = attachedAutoresCollectionNew;
             livros.setAutoresCollection(autoresCollectionNew);
@@ -129,16 +134,21 @@ public class LivrosJpaController {
                 editoraIdNew.getLivrosCollection().add(livros);
                 editoraIdNew = em.merge(editoraIdNew);
             }
-            for (Autores autoresCollectionOldAutores : autoresCollectionOld) {
-                if (!autoresCollectionNew.contains(autoresCollectionOldAutores)) {
-                    autoresCollectionOldAutores.getLivrosCollection().remove(livros);
-                    autoresCollectionOldAutores = em.merge(autoresCollectionOldAutores);
+            for (LivrosAutores autoresCollectionOldLivrosAutores : autoresCollectionOld) {
+                if (!autoresCollectionNew.contains(autoresCollectionOldLivrosAutores)) {
+                    autoresCollectionOldLivrosAutores.setLivro(null);
+                    autoresCollectionOldLivrosAutores = em.merge(autoresCollectionOldLivrosAutores);
                 }
             }
-            for (Autores autoresCollectionNewAutores : autoresCollectionNew) {
-                if (!autoresCollectionOld.contains(autoresCollectionNewAutores)) {
-                    autoresCollectionNewAutores.getLivrosCollection().add(livros);
-                    autoresCollectionNewAutores = em.merge(autoresCollectionNewAutores);
+            for (LivrosAutores autoresCollectionNewLivrosAutores : autoresCollectionNew) {
+                if (!autoresCollectionOld.contains(autoresCollectionNewLivrosAutores)) {
+                    Livros oldLivroOfAutoresCollectionNewLivrosAutores = autoresCollectionNewLivrosAutores.getLivro();
+                    autoresCollectionNewLivrosAutores.setLivro(livros);
+                    autoresCollectionNewLivrosAutores = em.merge(autoresCollectionNewLivrosAutores);
+                    if (oldLivroOfAutoresCollectionNewLivrosAutores != null && !oldLivroOfAutoresCollectionNewLivrosAutores.equals(livros)) {
+                        oldLivroOfAutoresCollectionNewLivrosAutores.getAutoresCollection().remove(autoresCollectionNewLivrosAutores);
+                        oldLivroOfAutoresCollectionNewLivrosAutores = em.merge(oldLivroOfAutoresCollectionNewLivrosAutores);
+                    }
                 }
             }
             em.getTransaction().commit();
@@ -180,10 +190,10 @@ public class LivrosJpaController {
                 editoraId.getLivrosCollection().remove(livros);
                 editoraId = em.merge(editoraId);
             }
-            Collection<Autores> autoresCollection = livros.getAutoresCollection();
-            for (Autores autoresCollectionAutores : autoresCollection) {
-                autoresCollectionAutores.getLivrosCollection().remove(livros);
-                autoresCollectionAutores = em.merge(autoresCollectionAutores);
+            Collection<LivrosAutores> autoresCollection = livros.getAutoresCollection();
+            for (LivrosAutores autoresCollectionLivrosAutores : autoresCollection) {
+                autoresCollectionLivrosAutores.setLivro(null);
+                autoresCollectionLivrosAutores = em.merge(autoresCollectionLivrosAutores);
             }
             em.remove(livros);
             em.getTransaction().commit();

@@ -2,24 +2,24 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entidades;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Vector;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,6 +33,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "livros", uniqueConstraints = {@UniqueConstraint(columnNames = {"TITULO"}), @UniqueConstraint(columnNames = {"ISBN"})})
 @NamedQueries({@NamedQuery(name = "Livros.findAll", query = "SELECT l FROM Livros l"), @NamedQuery(name = "Livros.findById", query = "SELECT l FROM Livros l WHERE l.id = :id"), @NamedQuery(name = "Livros.findByTitulo", query = "SELECT l FROM Livros l WHERE l.titulo = :titulo"), @NamedQuery(name = "Livros.findByIsbn", query = "SELECT l FROM Livros l WHERE l.isbn = :isbn"), @NamedQuery(name = "Livros.findByAno", query = "SELECT l FROM Livros l WHERE l.ano = :ano"), @NamedQuery(name = "Livros.findByEdicaoNr", query = "SELECT l FROM Livros l WHERE l.edicaoNr = :edicaoNr"), @NamedQuery(name = "Livros.findByAquisicaoData", query = "SELECT l FROM Livros l WHERE l.aquisicaoData = :aquisicaoData"), @NamedQuery(name = "Livros.findByAquisicaoValor", query = "SELECT l FROM Livros l WHERE l.aquisicaoValor = :aquisicaoValor")})
 public class Livros implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -61,13 +62,15 @@ public class Livros implements Serializable {
     @JoinColumn(name = "EDITORA_ID", referencedColumnName = "ID")
     @ManyToOne
     private Editoras editoraId;
-    @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "AUTORES_LIVROS",
-    joinColumns = @JoinColumn(name = "LIVRO_ID", referencedColumnName = "ID"),
-    inverseJoinColumns = @JoinColumn(name = "AUTOR_ID"))
-    private Collection<Autores> autoresCollection;
+//    @ManyToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name = "AUTORES_LIVROS",
+//    joinColumns = @JoinColumn(name = "LIVRO_ID", referencedColumnName = "ID"),
+//    inverseJoinColumns = @JoinColumn(name = "AUTOR_ID"))
+    @OneToMany(mappedBy = "livro", cascade=CascadeType.ALL)
+    private Collection<LivrosAutores> autoresCollection;
 
     public Livros() {
+        autoresCollection = new ArrayList<LivrosAutores>();
     }
 
     public Livros(Long id) {
@@ -80,6 +83,17 @@ public class Livros implements Serializable {
         this.isbn = isbn;
         this.aquisicaoData = aquisicaoData;
         this.aquisicaoValor = aquisicaoValor;
+    }
+
+    public void addAutor(Autores autor, boolean isEditado) {
+        LivrosAutores associacao = new LivrosAutores();
+        associacao.setAutor(autor);
+        associacao.setLivro(this);
+        associacao.setIdAutor(autor.getId());
+        associacao.setIdLivro(this.getId());
+        associacao.setIsEditado(isEditado);
+
+        autoresCollection.add(associacao);
     }
 
     public Long getId() {
@@ -154,11 +168,11 @@ public class Livros implements Serializable {
         this.editoraId = editoraId;
     }
 
-    public Collection<Autores> getAutoresCollection() {
+    public Collection<LivrosAutores> getAutoresCollection() {
         return autoresCollection;
     }
 
-    public void setAutoresCollection(Collection<Autores> autoresCollection) {
+    public void setAutoresCollection(Collection<LivrosAutores> autoresCollection) {
         this.autoresCollection = autoresCollection;
     }
 
@@ -186,5 +200,4 @@ public class Livros implements Serializable {
     public String toString() {
         return "entidades.Livros[id=" + id + "]";
     }
-
 }

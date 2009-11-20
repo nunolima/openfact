@@ -4,20 +4,18 @@
  */
 package jpa;
 
-import entidades.Areas;
 import entidades.Autores;
-import entidades.Editoras;
 import entidades.Livros;
+import entidades.LivrosAutores;
 import entidades.controller.AreasJpaController;
 import entidades.controller.AutoresJpaController;
 import entidades.controller.EditorasJpaController;
 import entidades.controller.LivrosJpaController;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -35,16 +33,16 @@ public class Main {
 
         try {
             // teste do commit svn
-////            1º AUTOR
-//            Autores autor1 = new Autores();
-//            autor1.setId(2L);
-//            autor1.setNome("Autor1");
-//            new AutoresJpaController().create(autor1);
-//            //2º AUTOR
-//            Autores autor2 = new Autores();
-//            autor2.setId(3L);
-//            autor2.setNome("Autor2");
-//            new AutoresJpaController().create(autor2);
+            //1º AUTOR
+            Autores autor1 = new Autores();
+            autor1.setId(11L);
+            autor1.setNome("Autor11");
+            new AutoresJpaController().create(autor1);
+            //2º AUTOR
+            Autores autor2 = new Autores();
+            autor2.setId(22L);
+            autor2.setNome("Autor22");
+            new AutoresJpaController().create(autor2);
 //
 //            // EDITORA
 //            Editoras editora1 = new Editoras();
@@ -60,22 +58,43 @@ public class Main {
 
             // 1º LIVRO
             Livros livro = new Livros();
-            livro.setId(114L);
-            livro.setTitulo("E tudo o JAVA levou 5");
-            livro.setIsbn("1238");
+            livro.setId(555L);
+            livro.setTitulo("E tudo o JAVA levou 555");
+            livro.setIsbn("15551");
             livro.setAquisicaoData(new Date());
             livro.setAquisicaoValor(20);
             livro.setEditoraId(new EditorasJpaController().findEditoras(new Long(1)));
             livro.setAreaId(new AreasJpaController().findAreas(new Long(1)));
 
+            Autores a1 = new AutoresJpaController().findAutores(new Long(11));
+            if (a1 != null) {
+                livro.addAutor(a1, true);
+            }
+            Autores a2 = new AutoresJpaController().findAutores(new Long(22));
+            if (a2 != null) {
+                livro.addAutor(a2, true);
+            }
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPU");
+            EntityManager em = emf.createEntityManager();
 
-            ArrayList<Autores> col = new ArrayList<Autores>();
-            col.add(new AutoresJpaController().findAutores(new Long(2)));
-            col.add(new AutoresJpaController().findAutores(new Long(3)));
+            em.getTransaction().begin();
+
+//            em.persist(livro);
+            em.merge(livro);
+//            em.merge(a2);
+
+            em.getTransaction().commit();
+
+            em.clear();
+            em.close();
+            emf.close();
+
+
+
+
 //            col.add(new AutoresJpaController().findAutores(new Long(3)));//Testar duplicação registo
-            livro.setAutoresCollection(col);
 
-            new LivrosJpaController().create(livro);
+            //new LivrosJpaController().create(livro);
 
 //            // 2º LIVRO
 //            Livros livro2 = new Livros();
@@ -97,7 +116,7 @@ public class Main {
 //            cSet.add(livro2);
 //            autor3.setLivrosCollection(cSet);
 //            new AutoresJpaController().create(autor3);
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
